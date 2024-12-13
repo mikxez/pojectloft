@@ -1,0 +1,70 @@
+{% load loft_tags %}
+
+<div class="products_filter">
+    <div class="container">
+        <div class="row justify-content-around">
+            <div class="dropdown pt-2 pt-lx-0">
+                <button class="products_filter-dropdown dropdown-toggle rounded" type="button" id="dropdownColor"
+                        data-bs-toggle="dropdown" aria-expanded="false">
+                    {% if subcategory %}{{ subcategory }}{% else %}Категория мебели{% endif %}
+                </button>
+                <ul class="dropdown-menu" aria-labelledby="dropdownColor">
+                    {% for sub_cat in subcategories %}
+                    <li><a class="dropdown-item" href="?{% query_params cat=sub_cat.title page=1 %}">{{ sub_cat.title }}</a>
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+            <div class="dropdown pt-2 pt-lx-0">
+                <button class="products_filter-dropdown dropdown-toggle rounded" type="button"
+                        id="dropdownStrapType" data-bs-toggle="dropdown" aria-expanded="false">
+                    {% if color %}{{ color }}{% else %}Цвета{% endif %}
+                </button>
+                <ul class="dropdown-menu" aria-labelledby="dropdownStrapType">
+                    {% for color in colors %}
+                    <li><a class="dropdown-item" href="?{% query_params color=color page=1 %}">{{ color }}</a></li>
+                    {% endfor %}
+                </ul>
+            </div>
+            <div class="dropdown pt-2 pt-lx-0">
+                <button class="products_filter-dropdown dropdown-toggle rounded" type="button" id="dropdownSort"
+                        data-bs-toggle="dropdown" aria-expanded="false">
+                    {% if brand %}{{ brand }}{% else %}Бреды{% endif %}
+                </button>
+                <ul class="dropdown-menu" aria-labelledby="dropdownSort">
+                    {% for brand in brands %}
+                    <li><a class="dropdown-item" href="?{% query_params brand=brand page=1 %}">{{ brand }}</a></li>
+                    {% endfor %}
+                </ul>
+            </div>
+            <div class="dropdown pt-2 pt-lx-0">
+                <button class="products_filter-dropdown dropdown-toggle rounded" type="button"
+                        id="dropdownPriceFrom" data-bs-toggle="dropdown" aria-expanded="false">
+                    {% if price_from %}{{ price_from }}{% else %}Цена от{% endif %}
+                </button>
+                <ul class="dropdown-menu" aria-labelledby="dropdownPriceFrom">
+                    {% for price in prices %}
+                    <li><a class="dropdown-item" href="?{% query_params from=price page=1 %}">{{ price }}</a></li>
+                    {% endfor %}
+                </ul>
+            </div>
+
+
+            <div class="dropdown pt-2 pt-lx-0">
+                <button class="products_filter-dropdown dropdown-toggle rounded" type="button"
+                        id="dropdownPriceTill" data-bs-toggle="dropdown" aria-expanded="false">
+                    {% if price_till %}{{ price_till }}{% else %}Цена до{% endif %}
+                </button>
+                <ul class="dropdown-menu" aria-labelledby="dropdownPriceTill">
+                    {% for price in prices %}
+                    <li><a class="dropdown-item" href="?{% query_params till=price page=1 %}">{{ price }}</a></li>
+                    {% endfor %}
+                </ul>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+

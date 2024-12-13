@@ -1,0 +1,158 @@
+{% extends 'base.html' %}
+{% load loft_tags %}
+
+{% block title %}
+{{ title }}
+{% endblock title %}
+
+
+{% block slider %}
+
+{% endblock slider %}
+
+
+{% block main %}
+
+<main class="main">
+            <div class="profile">
+                <div class="container">
+                    <div class="profile__content">
+                        <form class="profile__form" method="post" action="{% url 'payment' %}">
+                            {% csrf_token %}
+                            <h2 class="profile__title">Оформить заказ</h2>
+                            <div class="profile__form-grid">
+
+                                <div class="input__title">
+                                    <h2>Имя</h2>
+                                    {{ customer_form.first_name }}
+                                </div>
+
+
+                                <div class="input__title">
+                                    <h2>Фамилия</h2>
+                                    {{ customer_form.last_name }}
+                                </div>
+
+                                <div class="input__title">
+                                    <h2>Телеграм</h2>
+                                    {{ customer_form.telegram }}
+                                </div>
+
+                                <div class="input__title">
+                                    <h2>Телеграм</h2>
+                                    {{ shipping_form.phone }}
+                                </div>
+
+
+
+                                <div class="input__title">
+                                    <h2>Регион</h2>
+                                    {{ shipping_form.region }}
+                                </div>
+
+                                <div class="input__title">
+                                    <h2>Город</h2>
+                                    {{ shipping_form.city }}
+                                </div>
+
+                                <div></div>
+
+                                <div class="input__title _span-two">
+                                    <h2>Адрес</h2>
+                                    {{ shipping_form.address }}
+                                </div>
+
+
+
+                            </div>
+
+                            <div class="input__title" style="margin-top: 20px">
+                                    <h2>Комментарий к заказу</h2>
+                                    {{ shipping_form.comment }}
+                            </div>
+
+                            <button class="btn profile__btn" type="submit">Перейти к оплате</button>
+
+                        </form>
+
+                        <div class="profile__orders">
+                            <h2 class="profile__title">Товары заказа</h2>
+
+                            <table class="profile__table">
+                                <tr>
+                                    <td colspan="4">Название товара</td>
+                                    <td>Цена</td>
+                                    <td>Количество</td>
+                                    <td>На сумму</td>
+                                </tr>
+
+                                {% for item in order_products %}
+                                <tr>
+                                    <td colspan="4" class="profile__title-adaptive">
+                                        <div class="tabel__item">
+                                            <img src="{{ item.product.get_first_photo }}" alt="img">
+                                            <span>{{ item.product.title }}</span>
+                                        </div>
+                                    </td>
+                                    <td class="profile__tabel-data">{% get_price item.product.price %}₽</td>
+                                    <td class="profile__tabel-data">{{ item.quantity }}</td>
+                                    <td class="profile__tabel-data">{% get_price item.get_total_price %}₽</td>
+                                </tr>
+                                {% endfor %}
+                                <!-- Не трогать - это заглушка для корректного отображения таблицы -->
+                                <tr>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                </tr>
+                                <!-- Не трогать - это заглушка для корректного отображения таблицы -->
+                            </table>
+                            <a href="#!" class="profile__orders-link">
+                                <h6>Сумма закза: {% get_price order.get_order_total_price %}₽</h6>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+{% endblock main %}
+
+{% block js %}
+<script>
+    const regionCities = {{ dict_city|safe }};
+
+const regionSelect = document.getElementById('id_region');
+const citySelect = document.getElementById('id_city');
+
+
+regionSelect.addEventListener('change', function() {
+  const selectedRegion = this.value;
+  updateCityOptions(selectedRegion);
+});
+
+
+function updateCityOptions(selectedRegion) {
+  citySelect.innerHTML = '<option value="" selected>---------</option>';
+  if (selectedRegion in regionCities) {
+    const cities = regionCities[selectedRegion];
+    cities.forEach(city => {
+      const option = document.createElement('option');
+      option.value = city[1];
+      option.text = city[0];
+      citySelect.add(option);
+    });
+  }
+}
+
+
+</script>
+{% endblock js %}
+
+
+
+

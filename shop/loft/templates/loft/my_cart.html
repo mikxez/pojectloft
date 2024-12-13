@@ -1,0 +1,93 @@
+{% extends 'base.html' %}
+{% load loft_tags %}
+
+{% block title %}
+{{ title }}
+{% endblock title %}
+
+{% block slider %}
+
+<section class="basket">
+                    <div class="basket__text">
+                        <h1 class="basket__title">Ваша корзина</h1>
+                        <span class="basket__count"><span>{{ order.get_order_total_products }}</span> товара</span>
+                    </div>
+                    <div class="basket__items">
+                        {% for order_product in order_products %}
+                        <div class="basket__item">
+                            <a href="{{ order_product.product.get_absolute_url }}" class="basket__item-img">
+                                <img src="{{ order_product.product.get_first_photo }}" alt="product">
+                            </a>
+                            <div class="basket__item-content">
+                                <div class="basket__item-text">
+                                    <h2 class="basket__item-title">{{ order_product.product.title }}</h2>
+                                    <p class="basket__item-price">
+                                        {% if order_product.product.discount %}
+                                        <span class="discount">
+                                            <i class="far fa-badge-percent"></i>
+                                            -{{ order_product.product.discount }}%
+                                        </span>
+                                        {% endif %}
+
+                                        <span class="old__price"><span>{% get_price order_product.total_price %}</span>₽</span>
+                                        <span class="price"><span>{% get_price order_product.get_total_price %}</span>₽</span>
+
+                                    </p>
+                                </div>
+                                <div class="basket__options">
+                                    <p class="basket__options-color">
+                                        Цвет:
+                                        <span class="color__name">{{ order_product.product.color_name }}</span>
+                                        <span class="color__block" style="background: {{ order_product.product.color_code }}"></span>
+                                    </p>
+                                    <p class="basket__options-count">
+                                        Количество:
+                                        <a href="{% url 'add_product' order_product.product.slug 'delete' %}" class="quantity_product">-</a>
+                                        <span>{{ order_product.quantity }}</span>
+                                        <a href="{% url 'add_product' order_product.product.slug 'add' %}" class="quantity_product">+</a>
+                                    </p>
+                                    <p class="basket__options-size">
+                                        Размер(Ш×Д×В): <span>{{ order_product.product.width }} СМ × {{ order_product.product.depth }} СМ × {{ order_product.product.height }} СМ</span>
+                                    </p>
+                                </div>
+                            </div>
+                            <a href="{% url 'delete' order_product.pk order_product.order.id %}" class="basket__delete">
+                                <i class="fas fa-times"></i>
+                            </a>
+                        </div>
+                        {% endfor %}
+                    </div>
+
+                    <form class="products__form">
+                    {% if order_products %}
+                        <span>Итоговая стоимость:<span class="products__form-price">{% get_price order.get_order_total_price %}₽</span> </span>
+                        <a href="{% url 'checkout' %}" class="btn products__form-btn">Оформить заказ</a>
+                    {% else %}
+                        <span> <span class="products__form-price">У вас пока нет товаров</span> </span>
+                    {% endif %}
+                    </form>
+                </section>
+
+{% endblock slider %}
+
+
+
+{% block main %}
+<main class="main">
+            <div class="container">
+                <section class="products">
+                    <h2 class="products__title">Хиты продаж</h2>
+                    <div class="products__content">
+
+                        <!-- /.products__item -->
+                                {% for product in products %}
+                                    {% include 'loft/components/_card.html' %}
+                                {% endfor %}
+                    </div>
+                    <!-- /.products__content -->
+                </section>
+                <!-- /.products -->
+            </div>
+            <!-- /.container -->
+        </main>
+{% endblock main %}

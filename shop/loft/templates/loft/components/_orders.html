@@ -1,0 +1,50 @@
+{% load loft_tags %}
+
+<div class="profile__orders">
+    <div class="d-flex justify-content-between">
+    <h2 class="profile__title">Заказ на сумму: {% get_price item.get_order_total_price %}₽</h2>
+    <p class="profile__title">{{ item.created_at }}</p>
+    </div>
+    <table class="profile__table">
+        <tr>
+            <td colspan="4">Товар</td>
+            <td>Цена</td>
+            <td>Количество</td>
+            <td>На сумму</td>
+        </tr>
+
+        {% for good in item.orderproduct_set.all %}
+        <tr>
+            <td colspan="4" class="profile__title-adaptive">
+                <div class="tabel__item">
+                    <img src="{{ good.product.get_first_photo }}" alt="img">
+                    <span>{{ good.product.title }}</span>
+                </div>
+            </td>
+            <td class="profile__tabel-data">
+                {% get_discount_price good.product.price  good.product.discount %}₽
+            </td>
+            <td class="profile__tabel-data">{{ good.quantity }}</td>
+            <td class="profile__tabel-data">{% get_price good.get_total_price %}₽</td>
+        </tr>
+        {% endfor %}
+
+        <!-- Не трогать - это заглушка для корректного отображения таблицы -->
+        <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        <!-- Не трогать - это заглушка для корректного отображения таблицы -->
+    </table>
+    {% if not 'my_orders' in request.path %}
+    <a href="{% url 'my_orders' %}" class="profile__orders-link">Смотреть всё</a>
+    {% endif %}
+</div>
+
+
+

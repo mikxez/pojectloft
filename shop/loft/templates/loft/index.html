@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+{% block title %}
+{{ title }}
+{% endblock title %}
+
+
+
+{% block main %}
+<main class="main">
+            <div class="container">
+                <section class="products">
+                    <h2 class="products__title">Хиты продаж</h2>
+                    <div class="products__content">
+
+                        <!-- /.products__item -->
+                        {% for category in categories %}
+                            {% for subcategory in category.subcategories.all %}
+                                {% for product in subcategory.products.all %}
+                                    {% include 'loft/components/_card.html' %}
+                                {% endfor %}
+                            {% endfor %}
+                        {% endfor %}
+
+                    </div>
+                    <!-- /.products__content -->
+                </section>
+                <!-- /.products -->
+            </div>
+            <!-- /.container -->
+        </main>
+{% endblock main %}
